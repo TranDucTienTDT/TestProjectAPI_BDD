@@ -1,9 +1,11 @@
-import requests, json
+import allure_behave
+import requests, json, allure
 from requests.structures import CaseInsensitiveDict
 from behave import *
-from configuration import config
+from features.configuration import config
 
 
+@allure.step('Login to TestProject')
 @given(u'Login to TestProject')
 def step_impl(context):
     """ Do something here to setup request"""
@@ -11,6 +13,36 @@ def step_impl(context):
     context.headers = CaseInsensitiveDict()
     context.headers["Authorization"] = config.TESTPROJECT_AUTHORIZATION_KEY
     context.headers["Content-Type"] = "application/json"
+
+
+@given(u'The uri is: "{uri}"')
+def step_impl(context, uri):
+    """ Set uri"""
+    context.url = context.url + uri
+
+
+@given(u'The query is: "{query}"')
+def step_impl(context, query):
+    """ Set query (optional)"""
+    context.url = context.url + query
+
+
+@when(u'The "{method}" request is sent.')
+def step_impl(context, method):
+    if method.upper() == "GET":
+        context.response = requests.get(context.url, headers=context.headers)
+    elif method.upper() == "POST":
+        context.response = requests.post(context.url, headers=context.headers, data=context.text)
+    elif method.upper() == "PUT":
+        context.response = requests.put(context.url, headers=context.headers, data=context.text)
+    elif method.upper() == "PATCH":
+        context.response = requests.patch(context.url, headers=context.headers, data=context.text)
+    elif method.upper() == "DELETE":
+        context.response = requests.delete(context.url)
+    elif method.upper() == "HEAD":
+        context.response = requests.head(context.url)
+    else:
+        raise Exception(f"This {method} is not supported.")
 
 
 @when(u'The GET request with uri "{uri}" is sent.')

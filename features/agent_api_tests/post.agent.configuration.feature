@@ -1,8 +1,8 @@
 Feature: Test API TestProject.io v2
 
- Scenario Outline: Test Post Agent's Configuration
+ Scenario: Test Post Agent's Configuration
     Given Login to TestProject
-    When The POST request with uri "/v2/agents/config" with payload below is sent.
+    When The POST request with uri "/v2/agents/config" and payload below is sent.
       """
       {
         "alias": "Linux Agent",
@@ -30,4 +30,4 @@ Feature: Test API TestProject.io v2
         }
       }
       """
-    Then The response status should be: 200
+    Then The response status should be: 2000

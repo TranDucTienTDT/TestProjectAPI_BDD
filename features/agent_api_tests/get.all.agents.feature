@@ -12,3 +12,13 @@ Feature: Test API TestProject.io v2
     Examples:
       | start | limit |
       | 0     | 10    |
+
+  Scenario Outline: Test Get All Agents with query new format
+    Given Login to TestProject
+      And The uri is: "/v2/agents"
+      And The query is: "?_start=<start>&_limit=<limit>"
+    When The "GET" request is sent.
+    Then The response status should be: 200
+    Examples:
+      | start | limit |
+      | 0     | 10    |
